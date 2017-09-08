@@ -27,13 +27,24 @@ db.on('error', (err) => {
 });
 
 db.once('open', function() {
-  console.log(`connected mongodb on ${process.env.MONGODB_URI}`);
+  console.log(`connected mongodb on ${ process.env.MONGODB_URI }`);
 });
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
+
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET,
+  store: new MongoStore({
+    url: process.env.MONGODB_URI,
+    autoReconnect: true,
+    clear_interval: 3600,
+  }),
+}));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
