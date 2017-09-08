@@ -1,0 +1,17 @@
+.odd-listgroup {
+	font-size: 10px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 163px;
+    text-overflow: ellipsis;
+}
+
+.list-group-item  > span {
+	font-size: 10px;
+}
+
+.list-scroll{
+	max-height: 800px;
+    overflow-y:scroll; 
+}
