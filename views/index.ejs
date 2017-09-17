@@ -7,32 +7,63 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/manage.css">
-
+	<link rel="stylesheet" type="text/css" href="/vendor/amcharts/plugins/export/export.css">
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+  
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.6/amcharts.js"></script>
+	<script type="text/javascript" charset="utf8" src="/js/main.js"></script>
+	<script type="text/javascript" charset="utf8" src="/vendor/amcharts/amcharts.js"></script>
+	<script type="text/javascript" charset="utf8" src="/vendor/amcharts/serial.js"></script>
+	<script type="text/javascript" charset="utf8" src="/vendor/amcharts/plugins/export/export.min.js"></script>
+
 </head>
 
 <body>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-md-3">
 			<div class="list-group list-plawin">
-				<a class="list-group-item active" href="#">Current TIME ZONE</a><a class="list-group-item serch-league" href="#"> 
+				<a class="list-group-item active" href="#">Current TIME ZONE 
+				<button type="button" class="btn btn-default btn-sm pull-right" onclick="selectView('nonlive')">
+	          <span class="glyphicon glyphicon-refresh"></span>
+	        </button></a>
+
+				<a class="list-group-item serch-league" href="#"> 
 				<input id="date-time" type="date" style="width:100%;height:28px;"></a>
 			</div>
 		<!-- <input type="date" name="" id="date-time" class="form-control" value="today"> -->
-		<div class="btn-group btn-phawin" role="group" aria-label="...">
+
+		<!-- <div class="btn-group btn-phawin" role="group" aria-label="...">
 			<button class="btn btn-default btn-phawin-group" type="button">Early</button>
 			<button class="btn btn-default btn-phawin-group" onclick="selectView('nonlive')" type="button">Non-Live</button>
 			<button class="btn btn-default btn-phawin-group" onclick="selectView('live')" type="button">Live</button>
-		</div>
+		</div> -->
+
 		<!-- input#date-time(type='date',style={'width': '100%','height':'28px;'},value=today) -->
 		<h5 class="text-center">Select Team</h5>
-			<div class="list-group list-scroll" id="count-leagues">
+			<!-- <div class="list-group list-scroll" id="count-leagues">
 				
-			</div>
+			</div> -->
+
+			<table id="match-table"  class="table table-hover">
+				<thead>
+					<tr>
+						<th>Team</th>
+						<th>Time</th>
+						<th>Count</th>
+					</tr>
+				</thead>
+				<tbody id="count-leagues" class="table-scroll">
+					<!-- <tr>
+						<td></td>
+					</tr> -->
+				</tbody>
+			</table>
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-9">
 		<h3 id="text-team" class="pull-right"></h3>
 		<div class="clearfix"></div>
 		<div role="tabpanel">
@@ -40,23 +71,27 @@
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="active">
-					<a href="#hdp" aria-controls="hdp" role="tab" data-toggle="tab">hdp</a>
+					<a href="#graph" aria-controls="graph" role="tab" data-toggle="tab"> graph <span id="head-graph" class="badge"></span></a>
 				</li>
 				<li role="presentation">
-					<a href="#fhdp" aria-controls="fhdp" role="tab" data-toggle="tab">fhdp</a>
+					<a href="#hdp" aria-controls="hdp" role="tab" data-toggle="tab">hdp <span id="head-hdp" class="badge"></span></a>
 				</li>
 				<li role="presentation">
-					<a href="#goal" aria-controls="goal" role="tab" data-toggle="tab">goal</a>
+					<a href="#fhdp" aria-controls="fhdp" role="tab" data-toggle="tab">fhdp <span id="head-fhdp" class="badge"></span></a>
 				</li>
 				<li role="presentation">
-					<a href="#fgoal" aria-controls="fgoal" role="tab" data-toggle="tab">fgoal</a>
+					<a href="#goal" aria-controls="goal" role="tab" data-toggle="tab">goal <span id="head-goal" class="badge"></span></a>
 				</li>
+				<li role="presentation">
+					<a href="#fgoal" aria-controls="fgoal" role="tab" data-toggle="tab">fgoal <span id="head-fgoal" class="badge"></span></a>
+				</li>
+				
 			</ul>
 		
 			<!-- Tab panes -->
 			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="hdp">
-					<table class="table table-bordered table-hover">
+				<div role="tabpanel" class="tab-pane" id="hdp">
+					<table class="table table-bordered table-hover" id="table-hdp">
 						<thead>
 							<tr>
 								<th>Time</th>
@@ -73,7 +108,7 @@
 					</table>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="fhdp">
-					<table class="table table-bordered table-hover">
+					<table class="table table-bordered table-hover" id="table-fhdp">
 						<thead>
 							<tr>
 								<th>Time</th>
@@ -90,7 +125,7 @@
 					</table>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="goal">
-					<table class="table table-bordered table-hover">
+					<table class="table table-bordered table-hover" id="table-goal">
 						<thead>
 							<tr>
 								<th>Time</th>
@@ -107,7 +142,7 @@
 					</table>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="fgoal">
-					<table class="table table-bordered table-hover">
+					<table class="table table-bordered table-hover" id="table-fgoal">
 						<thead>
 							<tr>
 								<th>Time</th>
@@ -123,6 +158,16 @@
 						</tbody>
 					</table>
 				</div>
+				<div role="tabpanel" class="tab-pane active" id="graph">
+					<h5 id="title-team-fthdp"></h5>
+					<div id="chartContainerHDP" class="grap-style"></div>
+					<h5 id="title-team-hthdp"></h5>
+					<div id="chartContainerFHDP" class="grap-style"></div>
+					<h5 id="title-team-ftgoal"></h5>
+					<div id="chartContainerGOAL" class="grap-style"></div>
+					<h5 id="title-team-htgoal"></h5>
+					<div id="chartContainerFGOAL" class="grap-style"></div>
+				</div>
 			</div>
 		</div>
 
@@ -134,13 +179,15 @@
 	
 	$(document).ready(function() {
 		// $('#date-time').defaultValue	
+		const set_time = new Date().toLocaleDateString()
+		$('#date-time').val(set_time)
 	});
 
 	$('#date-time').change(function(event) {
 		/* Act on the event */
 		const $dateElement = $('#date-time');
   		const date = formatDate($dateElement.val());
-  		console.log(date)
+  		selectView('nonlive')
 	});
 
 	function formatDate(date = null) {
@@ -156,34 +203,68 @@
 	}
 
 	function selectView(view = 'nonlive') {
-	  const $dateElement = $('#date-time');
-	  const $numLeagues = $('#count-leagues');
-	  const date = formatDate($dateElement.val());
-	  $.post(`/matchesDetail/${date}/${view}`)
-	  .done( function(data) {
-	  	console.log(data);
-	    const team = data;
-	    const $leaguesElement = $('#count-leagues');
-	    let $newLeagueElement = '';
-	    for(const index in team) {
-	    $newLeagueElement += `<button type="button" class="list-group-item odd-listgroup" onclick="getmatches('${team[index]._id}')"> ${team[index].home} - ${team[index].away}</button>`;
-	    }
-	    $numLeagues.html(`Leagues (${team.length})`)
-	    $leaguesElement.html($newLeagueElement);
-	  });
+		const $dateElement = $('#date-time');
+		const $numLeagues = $('#count-leagues');
+		const date = formatDate($dateElement.val());
+		const sort_team = {}; 
+	 	console.log($dateElement);
+		  $.post(`/matchesDetail/${date}/${view}`)
+		  .done( function(data) {
+		    const team = data;
+		    const $leaguesElement = $('#count-leagues');
+		    let $newLeagueElement = '';
+		    const arr = [];
+		    console.log(team);
+		    for(const index in team) {
+		    	const num = team[index].hdp.length + team[index].fhdp.length + team[index].goal.length + team[index].fgoal.length;
+		    	const time = new Date(team[index].nonlive.time)
+		    	$newLeagueElement += `<tr onclick="getmatches('${team[index]._id}')">`;
+		    	$newLeagueElement += `<td>${ team[index].home} - ${team[index].away }</td>`;
+		    	$newLeagueElement += `<td>${ team[index].nonlive.time }</td>`;
+		    	$newLeagueElement += `<td>${ num }</td>`;
+		    	$newLeagueElement += `</tr>`;
+		    }
+		  
+			dataTableDestroy('#match-table')
+		    $numLeagues.html(`Leagues (${team.length})`)
+		    $leaguesElement.html($newLeagueElement);
+		   	setDatatable('#match-table')
+		  });
+	}
+
+	function setDatatable(element) {
+		$(`${element}`).DataTable({
+	    	destroy: true,
+			order: [ 2, "desc" ],
+	    	scrollY: 500,
+			paging: false
+	    })
+	}
+
+	function dataTableDestroy(element) {
+		$(`${element}`).dataTable().fnDestroy();
+	}
+
+	function setDatatableNonscroll(element) {
+		$(`${element}`).DataTable({
+	    	destroy: true,
+			paging: false
+	    })
 	}
 
 	function getmatches(match_id) {
 		let $team; 
 		const hmColor = [];
-
 		$.post(`/matches/${match_id}`, 
 			function(data, textStatus, xhr) {
 			/*optional stuff to do after success */
 			console.log(data);
+	 		selectDetailMatch(data.team_id,'nonlive');
+
 			$team = `<span style="color:${data.homeColor}">${data.home}</span> -vs- <span style="color:${data.awayColor}">${data.away} </span>`
 			$.each(['hdp','fhdp','goal','fgoal'], function(index, val) {
 				let $html;
+				let arr;
 				 /* iterate through array or object */
 				$.each(data[`${val}`], function(index, val) {
 					 /* iterate through array or object */
@@ -195,9 +276,12 @@
 					$html += `<td>${val.score}</td>`
 					$html += `<td>${val.odddetail}</td>`
 					$html += `</tr>`;
-					// console.log(val)
+					// console.log(index)
 				});
+				dataTableDestroy(`#table-${val}`)	
 				$(`#dutaion-${val}`).html($html)
+				$(`#head-${val}`).html(data[`${val}`].length)
+	   			setDatatableNonscroll(`#table-${val}`)
 			});
 			$('#text-team').html($team)
 		});

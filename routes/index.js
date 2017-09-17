@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ScoreLiveController = require('../controllers/scoreliveController');
-const ScorenonLiveController = require('../controllers/scorenonliveController');
+const ScoreNonLiveController = require('../controllers/scorenonliveController');
 const notiController = require('../controllers/notiController');
 
 /* GET home page. */
@@ -14,7 +14,11 @@ router.get('/', function(req, res, next) {
   	// });
 });
 
+
+
 router.post('/matchesDetail/:date/:view', notiController.getAllMatches);
 router.post('/matches/:id', notiController.getMatches);
+router.get('/matches/:id/detail', ScoreNonLiveController.matcheDetail);
+
 
 module.exports = router;

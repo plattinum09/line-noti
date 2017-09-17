@@ -3,21 +3,23 @@ const ScoreNonLive = require('../models/scorenonliveModel');
 const notinonlive = require('../models/notificationnonlive');
 const extratime = 0;
 
-// const intervalObj = setInterval(() => {
-//  duration_team()
-// }, 200);
+ // const intervalObj = setInterval(() => { 
+ //  duration_team()
+ // }, 1000);
 
 function duration_team() {
+
   	const date = moment();
   	const start = date.clone().hours(-5);
-  	const time_now = date.clone().second(6).format("YYYY-MM-DD HH:mm:ss.SSS")
+  	const time_now = date.clone().second(1).format("YYYY-MM-DD HH:mm:ss.SSS")
   	const end = date.clone().add(1, 'days').hours(21);
-  	const leagues =  ScoreNonLive
+  	const leagues =  ScoreNonLive  	
      .find({'nonlive.timestamp' : {$gte: start ,$lt: end}, 'hdp.time' : {$gte: time_now}}).exec(function(err, leagues) {
+
      	if (leagues != null) {
      		leagues.forEach(function(data) {
 	          const item = data
-	          const flag_insert = true
+	          var flag_insert = true
 	            if (item.hdp.length > 2) {
 	            	i = item.hdp.length
 	            	hdp_old   = item.hdp[i-1]
@@ -65,22 +67,45 @@ function duration_team() {
 }
 
 const option = {
-    setHDP: (item , hdp_old, hdp_last , hdptype ,queryhdp,flag_insert)=>{
+    setHDP: (item , hdp_old, hdp_last , hdptype ,queryhdp,flag_insert)=>{    	
 			notinonlive.find({team_id :item._id}).exec(function(err, team) {
-	          i = item[`${hdptype}`].length
-	          odd  =  ''
+			var Detail = '';
+			if (team != null) {
+				i = item[`${hdptype}`].length
+	          odd  =  0
 	          if (hdptype == 'hdp' || hdptype == 'fhdp') {
 	          	 if (item.homeColor == "red" || item.homeColor == "blue"  && item.awayColor  == "blue") {
-		            odd  =  hdp_last.home - hdp_old.home 
+          	 		odd  = hdp_last.home - hdp_old.home
+		            if ( hdp_old.home > 0 && hdp_last.home < 0 ) {
+						odd  = parseFloat(1 - parseFloat(hdp_old.home)) + parseFloat(1 + parseFloat(hdp_last.home))
+		           
+		            }else if(hdp_old.home < 0 && hdp_last.home > 0 ){
+						odd  =   parseFloat(parseFloat(hdp_last.home) - 1) - parseFloat( parseFloat(hdp_old.home) + 1 )
+		            }
+	                console.log( odd);	
 		            Detail = 'home :'+hdp_old.home +' : '+ hdp_last.home
+
 		          }else if(item.awayColor  == "red" ){
 		            odd  = hdp_last.away - hdp_old.away 
+		            if ( hdp_old.away > 0 && hdp_last.away < 0 ) {
+						odd  = parseFloat(1 - parseFloat(hdp_old.away)) + parseFloat(1 + parseFloat(hdp_last.away))
+		           
+		            }else if(hdp_old.away < 0 && hdp_last.away > 0 ){
+						odd  =   parseFloat(parseFloat(hdp_last.home) - 1) - parseFloat( parseFloat(hdp_old.home) + 1 )
+		            }
+	                console.log( odd);
 		            Detail = 'away :'+hdp_old.away + ' : ' + hdp_last.away
 		          }
 	          }else{
 					odd  =  hdp_last.over - hdp_old.over 
+					if ( hdp_old.over > 0 && hdp_last.over < 0 ) {
+						odd  = parseFloat(1 - parseFloat(hdp_old.over)) + parseFloat(1 + parseFloat(hdp_last.over))
+		           
+		            }else if(hdp_old.away < 0 && hdp_last.over > 0 ){
+						odd  =   parseFloat(parseFloat(hdp_last.home) - 1) - parseFloat( parseFloat(hdp_old.home) + 1 )
+					}
+					Detail = 'over :'+hdp_old.over + ' : ' + hdp_last.over
 	          }
-		          
 	          if (team.length > 0) {
 	               	const update1 	= {}
 	                const query 	= {}
@@ -126,7 +151,9 @@ const option = {
 	              instance.save()
 	              console.log('working: New')
 	          }
-	      })
+	     
+			}
+	    })   
     }
 }
 
@@ -157,7 +184,7 @@ const getAllMatches = async (req, res) => {
   const end 	= date.clone().add(1, 'days').hours(11);
   const matches = await notinonlive
     .find({ })
-    .select('home away homeColor awayColor liveCreatedAt')
+    .select('home away homeColor awayColor liveCreatedAt hdp fhdp goal fgoal nonlive')
     .where('nonlive.timestamp').gte(start).lt(end);
   res.json(matches);
 };
