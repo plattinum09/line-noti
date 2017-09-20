@@ -182,8 +182,8 @@ const getAllMatches = async (req, res) => {
   const start 	= date.clone().hours(11);
   console.log(start);
   const end 	= date.clone().add(1, 'days').hours(11);
-  const matches = await notinonlive
-    .find({ })
+  const matches = await ScoreNonLive
+    .find({})
     .select('home away homeColor awayColor liveCreatedAt hdp fhdp goal fgoal nonlive')
     .where('nonlive.timestamp').gte(start).lt(end);
   res.json(matches);

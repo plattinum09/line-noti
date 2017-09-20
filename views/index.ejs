@@ -96,9 +96,10 @@
 							<tr>
 								<th>Time</th>
 								<th>Duration</th>
-								<th>Odd</th>
-								<th>Odd</th>
-								<th>Score</th>
+								<th>Odds</th>
+								<th>Odd-change</th>
+								<th>Odd-change</th>
+								<th>Value</th>
 								<th> - </th>
 							</tr>
 						</thead>
@@ -113,9 +114,10 @@
 							<tr>
 								<th>Time</th>
 								<th>Duration</th>
-								<th>Odd</th>
-								<th>Odd</th>
-								<th>Score</th>
+								<th>Odds</th>
+								<th>Odd-change</th>
+								<th>Odd-change</th>
+								<th>Value</th>
 								<th> - </th>
 							</tr>
 						</thead>
@@ -130,9 +132,10 @@
 							<tr>
 								<th>Time</th>
 								<th>Duration</th>
-								<th>Odd</th>
-								<th>Odd</th>
-								<th>Score</th>
+								<th>Odds</th>
+								<th>Odd-change</th>
+								<th>Odd-change</th>
+								<th>Value</th>
 								<th> - </th>
 							</tr>
 						</thead>
@@ -147,9 +150,10 @@
 							<tr>
 								<th>Time</th>
 								<th>Duration</th>
-								<th>Odd</th>
-								<th>Odd</th>
-								<th>Score</th>
+								<th>Odds</th>
+								<th>Odd-change</th>
+								<th>Odd-change</th>
+								<th>Value</th>
 								<th> - </th>
 							</tr>
 						</thead>
@@ -216,12 +220,13 @@
 		    const arr = [];
 		    console.log(team);
 		    for(const index in team) {
-		    	const num = team[index].hdp.length + team[index].fhdp.length + team[index].goal.length + team[index].fgoal.length;
+		    	const num =  team[index].hdp.length + team[index].fhdp.length + team[index].goal.length + team[index].fgoal.length;
 		    	const time = new Date(team[index].nonlive.time)
 		    	$newLeagueElement += `<tr onclick="getmatches('${team[index]._id}')">`;
 		    	$newLeagueElement += `<td>${ team[index].home} - ${team[index].away }</td>`;
 		    	$newLeagueElement += `<td>${ team[index].nonlive.time }</td>`;
 		    	$newLeagueElement += `<td>${ num }</td>`;
+		    	// $newLeagueElement += `<td></td>`;
 		    	$newLeagueElement += `</tr>`;
 		    }
 		  
@@ -253,38 +258,8 @@
 	}
 
 	function getmatches(match_id) {
-		let $team; 
 		const hmColor = [];
-		$.post(`/matches/${match_id}`, 
-			function(data, textStatus, xhr) {
-			/*optional stuff to do after success */
-			console.log(data);
-	 		selectDetailMatch(data.team_id,'nonlive');
-
-			$team = `<span style="color:${data.homeColor}">${data.home}</span> -vs- <span style="color:${data.awayColor}">${data.away} </span>`
-			$.each(['hdp','fhdp','goal','fgoal'], function(index, val) {
-				let $html;
-				let arr;
-				 /* iterate through array or object */
-				$.each(data[`${val}`], function(index, val) {
-					 /* iterate through array or object */
-					$html += `<tr>`
-					$html += `<td>${val.time}</td>`
-					$html += `<td>${val.duration}</td>`
-					$html += `<td>${(val.odd >= 0 ? val.odd:'')}</td>`
-					$html += `<td>${(val.odd < 0 ? val.odd:'')}</td>`
-					$html += `<td>${val.score}</td>`
-					$html += `<td>${val.odddetail}</td>`
-					$html += `</tr>`;
-					// console.log(index)
-				});
-				dataTableDestroy(`#table-${val}`)	
-				$(`#dutaion-${val}`).html($html)
-				$(`#head-${val}`).html(data[`${val}`].length)
-	   			setDatatableNonscroll(`#table-${val}`)
-			});
-			$('#text-team').html($team)
-		});
+ 		selectDetailMatch(match_id,'nonlive');
 	}
 	
 </script>

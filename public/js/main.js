@@ -184,7 +184,7 @@ function getDetailMatch(id, view){
     const awayColor = data.awayColor;
     const homeColor = data.homeColor;
     const thisTeam = `<span style="color:${homeColor}">${data.home}</span>  -vs- <span style="color:${awayColor}">${data.away}</span>`;
-
+	$('#text-team').html(thisTeam)
     if (awayColor === 'blue' && homeColor === 'blue') {
       valueGraph = 'home';
     } else if (awayColor === 'red') {
@@ -296,8 +296,9 @@ function geneGraphEach(data, filter, type, value, containername) {
         odds: isNaN(parseFloat(obj[index][value])) ? 0.00 : parseFloat(obj[index][value]),
       });
       arrChangeval[filter].push(newDate.toLocaleString());
+
     } else if ($.inArray(newDate.toLocaleString(), arrChangeval[filter]) > -1) {
-      changeValue = false;
+      changeValue = false;      
       continue;
     } else {
       arrChangeval[filter].push(newDate.toLocaleString());
@@ -326,7 +327,6 @@ function geneGraphEach(data, filter, type, value, containername) {
     $(`#${containername}`).show();
     $(`#${containername}`).empty();
     chartValue[filter] = callAmchart(containername, chartdata);
-
     for (let i in guideOdd) {
       chartValue[filter].categoryAxis.addGuide(guideOdd[i]);
     }
@@ -336,9 +336,46 @@ function geneGraphEach(data, filter, type, value, containername) {
     }
 
     chartValue[filter].validateNow();
+    // console.log(filter,chartdata);
+    pain_getmatches(filter,chartdata);
+	console.log(filter,chartdata);
   }
 }
-
+function pain_getmatches(filter,chartdata) {
+	$.each(chartdata, function(index, val) {
+		let $html;
+		let arr;
+		 /* iterate through array or object */
+		$.each(chartdata, function(index, val) {
+			 /* iterate through array or object */
+			const odd_val = index == 0 ? 0 : calculator(parseFloat(val.odds) , parseFloat(chartdata[index - 1].odds))
+			$html += `<tr>`
+			$html += `<td>${val.date}</td>`
+			$html += `<td></td>`
+			$html += `<td>${val.odds}</td>`
+			$html += `<td>${(odd_val >= 0 ? odd_val.toFixed(2):'')}</td>`
+			$html += `<td>${(odd_val < 0 ? odd_val.toFixed(2):'')}</td>`
+			$html += `<td>${parseFloat(val.values).toFixed(2)}</td>`
+			$html += `<td></td>`
+			$html += `</tr>`;
+			// console.log(index)
+		});
+		dataTableDestroy(`#table-${filter}`)	
+		$(`#dutaion-${filter}`).html($html)
+		$(`#head-${filter}`).html(chartdata.length)
+		setDatatableNonscroll(`#table-${filter}`)
+	});
+}
+function calculator(oods,odds_old) {
+	let $odd; 
+	$odd = oods - odds_old;
+	if (odds_old  > 0 && oods < 0) {
+		$odd = (1 - odds_old) + (1 + oods)
+	}else if(odds_old  < 0 && oods > 0){
+		$odd = (oods - 1) - (odds_old + 1)
+	}
+	return $odd; 
+}
 // search match -------------------------------------------
 
 $( '#search-team' ).keypress(function(e) {
