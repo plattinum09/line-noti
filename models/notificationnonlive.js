@@ -11,6 +11,16 @@ const notiSchema = mongoose.Schema(
     homeColor: String,
     awayColor: String,
     nonliveCreatedAt: Date,
+    notihdp: [
+      {
+        time: String,
+        time_change: String,
+        odd: String,
+        hdp: String,
+        round: String,
+        value:String
+      },
+    ],
     hdp: [
       {
         time: String,

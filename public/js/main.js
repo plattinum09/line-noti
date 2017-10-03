@@ -184,7 +184,7 @@ function getDetailMatch(id, view){
     const awayColor = data.awayColor;
     const homeColor = data.homeColor;
     const thisTeam = `<span style="color:${homeColor}">${data.home}</span>  -vs- <span style="color:${awayColor}">${data.away}</span>`;
-	$('#text-team').html(thisTeam)
+	 $('#text-team').html(thisTeam)
     if (awayColor === 'blue' && homeColor === 'blue') {
       valueGraph = 'home';
     } else if (awayColor === 'red') {
