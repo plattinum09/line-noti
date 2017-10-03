@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const request = require('request')
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 80;
 dotenv.load();
 
 mongoose.Promise = global.Promise;
