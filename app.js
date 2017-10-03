@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const request = require('request')
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 5000;
 dotenv.load();
 
 mongoose.Promise = global.Promise;
@@ -159,7 +159,7 @@ function duration_team() {
   });
     console.log('botstart');
     // duration_team()
-    setTimeout(duration_team, 10);
+    setTimeout(duration_team, 100);
 }
 // const acckey = 'f6+s4Q+2ZdOyHfJsgFhwWsrQA1GuOWNl0IiU5xUXjRHRnvHZ8G+SxbfGDzcstYzAgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdLsNyxPuqun4jDNqGNe0hMiDS91KrXWL0FlI9Wa9CkthgdB04t89/1O/w1cDnyilFU='
 // pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],'test phawin',acckey)
