@@ -4,6 +4,8 @@ const notiSchema = mongoose.Schema(
   {
     league: String,
     team_id: String,
+    count_hdp: Number,
+    count_price: Number,
     home: String,
     away: String,
     homeColor: String,
