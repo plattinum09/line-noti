@@ -30,19 +30,13 @@ db.once('open', function() {
   console.log(`connected mongodb on ${ process.env.MONGODB_URI }`);
 });
 
- const intervalObj = setInterval(() => { 
-  // console.log('adasd');
-  duration_team()
- }, 1000);
-
-
 // section app.notify()
 const moment = require('moment');
 const ScoreNonLive = require('./models/scorenonliveModel');
 const notinonlive = require('./models/notificationnonlive');
 const extratime = 0;
 
-
+duration_team()
 function duration_team() {
     const date = moment();
     const start = date.clone().hours(-5);
@@ -157,11 +151,15 @@ function duration_team() {
                         }
                     })
                 }
+                
+
             }
       });
     }
   });
     console.log('botstart');
+    // duration_team()
+    setTimeout(duration_team, 10);
 }
 // const acckey = 'f6+s4Q+2ZdOyHfJsgFhwWsrQA1GuOWNl0IiU5xUXjRHRnvHZ8G+SxbfGDzcstYzAgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdLsNyxPuqun4jDNqGNe0hMiDS91KrXWL0FlI9Wa9CkthgdB04t89/1O/w1cDnyilFU='
 // pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],'test phawin',acckey)
