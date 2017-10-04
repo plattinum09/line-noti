@@ -151,18 +151,17 @@ function duration_team() {
                         }
                     })
                 }
-                
-
             }
       });
     }
   });
     console.log('botstart');
     // duration_team()
-    setTimeout(duration_team, 100);
+    setTimeout(duration_team, 500);
 }
-// const acckey = 'f6+s4Q+2ZdOyHfJsgFhwWsrQA1GuOWNl0IiU5xUXjRHRnvHZ8G+SxbfGDzcstYzAgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdLsNyxPuqun4jDNqGNe0hMiDS91KrXWL0FlI9Wa9CkthgdB04t89/1O/w1cDnyilFU='
-// pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],'test phawin',acckey)
+// const acckey = 'u7PR2a6RIvHTo9NA/Cfr+JlVLc9+EaUEqRZmcGbxqWZoVi2E/tYzuVdS4PzAy+BqgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdICqT404EQDVgLdT3PcTwXqZHEBHMVqIdCUXViUPB1/EQdB04t89/1O/w1cDnyilFU='
+// pushMassage(['U8eb2dd94f8053572d303decd1413dda8'],'Test Token',acckey)
+
 function calculator(oods,odds_old) {
     let $odd; 
     $odd = oods - odds_old;
@@ -207,19 +206,6 @@ function getChangeval(data, filter, type, value, containername) {
   const time_chane =  moment(hdp_old.time)  - moment(hdp_last.time)
   return moment(time_chane).second()
 }
-
-app.post('/webhook', (req, res) => {
-  var text = req.body.events[0].message.text
-  var sender = req.body.events[0].source.userId
-  var replyToken = req.body.events[0].replyToken
-  console.log(text, sender, replyToken)
-  console.log(typeof sender, typeof text)
-  // console.log(req.body.events[0])
-  if (text === 'สวัสดี' || text === 'Hello' || text === 'hello') {
-    sendText(sender, text)
-  }
-  res.sendStatus(200)
-})
 
 function sendText (sender, text) {
   let data = {
