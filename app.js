@@ -155,7 +155,7 @@ function duration_team() {
       });
     }
   });
-    console.log('botstart');
+    console.log('botstart'+moment().format('hh:mm:ss'));
     // duration_team()
     setTimeout(duration_team, 500);
 }
