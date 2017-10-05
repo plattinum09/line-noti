@@ -157,7 +157,7 @@ function duration_team() {
   });
     console.log('botstart'+moment().format('hh:mm:ss'));
     // duration_team()
-    setTimeout(duration_team, 500);
+    setTimeout(duration_team, 200);
 }
 // const acckey = 'u7PR2a6RIvHTo9NA/Cfr+JlVLc9+EaUEqRZmcGbxqWZoVi2E/tYzuVdS4PzAy+BqgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdICqT404EQDVgLdT3PcTwXqZHEBHMVqIdCUXViUPB1/EQdB04t89/1O/w1cDnyilFU='
 // pushMassage(['U8eb2dd94f8053572d303decd1413dda8'],'Test Token',acckey)
