@@ -106,7 +106,7 @@ function duration_team() {
                 const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
                 const acckey = 'fllp2WVP9YAEECywOXOdagD/tZ728YVncRYAXdoMXByjBttmYFPv0KalPGSTrsCPgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdKlXmV0eYF3f1lnhRXgckG93RQea6gYlcVAstA4sKIeUwdB04t89/1O/w1cDnyilFU='
                 console.log(calculator_odd.toFixed(2))
-                if (calculator_odd > 0.12 && changeval.last.values !== changeval.lastPad.values) {
+                if (calculator_odd >= 0.13 && changeval.last.values !== changeval.lastPad.values) {
                     notinonlive.findOne({ team_id :data._id }).exec(function(err, team) {
                         const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
                         const text = `${current_time} Time : ${data.nonlive.time}  ${data[colorTeam]} ( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
@@ -128,7 +128,7 @@ function duration_team() {
                             pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
                         }
                     })
-                }else if (calculator_odd < -0.12 && changeval.last.values !== changeval.lastPad.values){
+                }else if (calculator_odd <= -0.13 && changeval.last.values !== changeval.lastPad.values){
                     notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
                         const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
                         const text = `${current_time} Time : ${data.nonlive.time}  ${data[valueGraph]} ( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
