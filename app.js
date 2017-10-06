@@ -169,7 +169,7 @@ function duration_team() {
   });
     console.log('botstart : '+moment().format('hh:mm:ss'));
     // duration_team()
-    setTimeout(duration_team, 400);
+    setTimeout(duration_team, 200);
 }
 // const acckey = 'u7PR2a6RIvHTo9NA/Cfr+JlVLc9+EaUEqRZmcGbxqWZoVi2E/tYzuVdS4PzAy+BqgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdICqT404EQDVgLdT3PcTwXqZHEBHMVqIdCUXViUPB1/EQdB04t89/1O/w1cDnyilFU='
 // const acckey = '6YgPSXQ6YBdxwGZZ5cpwCl2jdMZ1U+tvyyfDrha7ETyfXf1ILhKSOsip9wk+FzI5ITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A0PMhIQPkO4BZBT8KEWqaE5ykxaOjYUSyCGsJUIZMl4UgdB04t89/1O/w1cDnyilFU='
