@@ -65,23 +65,22 @@ function duration_team() {
             if (hdpnow > 1) {
               const time_change =  getChangeval(data.hdp, 'hdp', 'FT-HDP');
               const changeval =  geneGraphEach_noti(data.hdp, 'hdp', 'FT-HDP', valueGraph, 'chartContainerHDP');
+              const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
               // if (time_change < 30) {
               //   const val_change = changeval.last
               //   notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
-              //       const acckey = '6YgPSXQ6YBdxwGZZ5cpwCl2jdMZ1U+tvyyfDrha7ETyfXf1ILhKSOsip9wk+FzI5ITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A0PMhIQPkO4BZBT8KEWqaE5ykxaOjYUSyCGsJUIZMl4UgdB04t89/1O/w1cDnyilFU='
-              //       let old_text  = ``
-              //       let text      = `${data.nonlive.time}  ${val_change.values}   ${data.league}  ( ${data.home} - ${data.away} ) R.${data.hdp.length}( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) S.${time_change} ${val_change.odds}`
-              //       console.log(text);
-              //       if (team == null) {
+              //       const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
+              //       let text      = `${data.nonlive.time}  ${val_change.values}  \n ${data.league}  \n ${valueGraph == 'home' ? '😘' :''} ${data.home} \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${data.hdp.length} ${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
+              //       if (team == null && changeval.last.values !== changeval.lastPad.values) {
               //           const instance = new notinonlive({ 
               //               'team_id' : data._id,
               //               'count_hdp' : data.hdp.length,
               //               'notihdp':{ 
               //                           time_change: time_change, 
               //                           hdp:  data.hdp[hdpnow-1].hdp,
-              //                           hdp_lastpad:  changeval.lastPad.odds,
+              //                           hdp_lastpad: changeval.lastPad.odds,
               //                           round:  data.hdp.length,
-              //                           odd: val_change.odds ,
+              //                           odd: calculator_odd.toFixed(2),
               //                           time: data.hdp[hdpnow-1].time,
               //                           value: val_change.value
               //                       }
@@ -89,34 +88,36 @@ function duration_team() {
               //           instance.save()
               //           pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
 
-              //       }else if(team.count_hdp !== data.hdp.length){
+              //       }else if(team.count_hdp !== data.hdp.length && changeval.last.values !== changeval.lastPad.values){
               //           const Obj_data = { 
               //                           time_change: time_change, 
               //                           hdp:  data.hdp[hdpnow-1].hdp,
-              //                           hdp_lastpad:  changeval.lastPad.odds,
+              //                           hdp_lastpad: changeval.lastPad.odds,
               //                           round:  data.hdp.length,
-              //                           odd: val_change.odds ,
+              //                           odd: calculator_odd.toFixed(2),
               //                           time: data.hdp[hdpnow-1].time,
               //                           value: val_change.value
-              //                       };
-              //           const noti_db = team.notihdp
-              //           old_text += `${data.nonlive.time}  ${val_change.values}   ${data.league}  ( ${data.home} - ${data.away} )`
-              //           for (var i in noti_db) {
-              //               old_text += `R.${noti_db[i].round}( HDP ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) S.${noti_db[i].time_change} ${noti_db[i].odd}`
-              //           }
-              //           old_text += `R.${data.hdp.length}( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) S.${time_change} ${val_change.odds}`
+              //                       }
               //           notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_hdp: data.hdp.length } ,$addToSet: {notihdp : Obj_data}}, {new: true}, function (err, massage) {
               //               if (massage != null) {
               //                    console.log('working: Update')
+              //                    const noti_db = massage.notihdp
+              //                   let old_text   = ''
+              //                   // console.log(noti_db)
+              //                   old_text += `${data.nonlive.time}  ${val_change.values} : ${noti_db.length} \n${data.league} \n ${data.home}${valueGraph == 'home' ? '😘' :''} \n ${data.away}${valueGraph == 'away' ? '😘' :''}`
+              //                   for (var i = 0; i < noti_db.length; i++) {
+              //                       old_text += ` \n ${noti_db[i].time_change} ( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) ${noti_db[i].odd}`
+              //                   }
+              //                   pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],old_text,acckey)
+              //                   console.log(old_text);
               //               }
               //           });
-              //           pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],old_text,acckey)
               //       }
               //   })
               // }
 
-                const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
-                const acckey = 'MEV7A7JPMnAo20GNkyEgl6GcnNU6amZEVh+WiFmVCLw1DFgwzd50a00InkgjZ48sgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdJLx88bmp0aXZNHU8ZS+Pll6ASP3Y0i4q3/FYjKFwJpTQdB04t89/1O/w1cDnyilFU='
+                
+                const acckey = '8uZ48WgxCyf206veNE6/TphXGUKtntc5pELOVAjn7xigtAk6QxbRTXXoIqFUymsigLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdIZzZHu0xCyUfHa9Eyvy0oQXUHN/ALB7oLjCdACV46R8QdB04t89/1O/w1cDnyilFU='
                 console.log(calculator_odd.toFixed(2))
                 if (calculator_odd >= 0.13 && changeval.last.values !== changeval.lastPad.values) {
                     notinonlive.findOne({ team_id :data._id }).exec(function(err, team) {
@@ -126,7 +127,8 @@ function duration_team() {
                         if (team == null) {
                             const instance = new notinonlive({ 
                                 'team_id' : data._id,
-                                'count_price' : data.hdp.length
+                                'count_price' : data.hdp.length,
+                                'count_hdp': 0
                             })
                             instance.save()
                             pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
@@ -148,7 +150,8 @@ function duration_team() {
                         if (team == null) {
                             const instance = new notinonlive({ 
                                 'team_id' : data._id,
-                                'count_price' : data.hdp.length
+                                'count_price' : data.hdp.length,
+                                'count_hdp': 0
                             })
                             instance.save()
                             pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
@@ -168,12 +171,12 @@ function duration_team() {
     }
   });
     console.log('botstart : '+moment().format('hh:mm:ss'));
-    // duration_team()
     setTimeout(duration_team, 200);
 }
 // const acckey = 'u7PR2a6RIvHTo9NA/Cfr+JlVLc9+EaUEqRZmcGbxqWZoVi2E/tYzuVdS4PzAy+BqgLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdICqT404EQDVgLdT3PcTwXqZHEBHMVqIdCUXViUPB1/EQdB04t89/1O/w1cDnyilFU='
 // const acckey = '6YgPSXQ6YBdxwGZZ5cpwCl2jdMZ1U+tvyyfDrha7ETyfXf1ILhKSOsip9wk+FzI5ITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A0PMhIQPkO4BZBT8KEWqaE5ykxaOjYUSyCGsJUIZMl4UgdB04t89/1O/w1cDnyilFU='
 // pushMassage(['U8eb2dd94f8053572d303decd1413dda8'],'Test Token',acckey)
+
 
 function calculator(oods,odds_old) {
     let $odd; 
@@ -212,12 +215,13 @@ function pushMassage(sender, text,acckey) {
       })
 }
 
-function getChangeval(data, filter, type, value, containername) {
+function getChangeval(data) {
   const num = data.length
   const hdp_last   = data[num-1]
   const hdp_old  = data[num-2]
-  const time_chane =  moment(hdp_old.time)  - moment(hdp_last.time)
-  return moment(time_chane).second()
+  const time_chane =  (moment(hdp_last.time) - moment(hdp_old.time))/ 1000
+  // console.log(hdp_old.time +'='+ hdp_last.time + ':' + time_chane)
+  return Math.round(time_chane)
 }
 
 function sendText (sender, text) {
