@@ -69,7 +69,7 @@ function duration_team() {
               const changeval =  geneGraphEach_noti(data.hdp, 'hdp', 'FT-HDP', valueGraph, 'chartContainerHDP');
               const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
               console.log(time_change +'<T:O>'+ calculator_odd)
-              if (time_change < 25 && (calculator_odd >= 0.4 || calculator_odd <= -0.4)) {
+              if (time_change < 25) {
                 const val_change = changeval.last
                 notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
                     const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
