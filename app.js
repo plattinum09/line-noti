@@ -158,7 +158,7 @@ function duration_team() {
               }else if (calculator_odd <= -0.13 && changeval.last.values !== changeval.lastPad.values){
                   notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
                       const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
-                      const text = `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘' \n( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
+                      const text = `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}😘 \n( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
                       console.log(text);
                       const obj_odd = { 
                                 odd:calculator_odd.toFixed(2),
@@ -179,7 +179,7 @@ function duration_team() {
                               if (massage != null) {
                                   const noti_db = massage.notiodd
                                   let old_text   = ''
-                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘'`
+                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}😘`
                                   for (var i = 0; i < noti_db.length; i++) {
                                       old_text += `\n( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) Odd : ${noti_db[i].odd}`
                                   }
