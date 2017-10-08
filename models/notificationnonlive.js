@@ -22,6 +22,17 @@ const notiSchema = mongoose.Schema(
         value:String
       },
     ],
+    notiodd: [
+      {
+        time: String,
+        time_change: String,
+        hdp_lastpad:String,
+        odd: String,
+        hdp: String,
+        round: String,
+        value:String
+      },
+    ],
     hdp: [
       {
         time: String,

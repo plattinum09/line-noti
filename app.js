@@ -36,6 +36,8 @@ const ScoreNonLive = require('./models/scorenonliveModel');
 const notinonlive = require('./models/notificationnonlive');
 const extratime = 0;
 
+
+const line_userid = ['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8','U08cfeb00ca57e281a986758c12a43e27']
 duration_team()
 function duration_team() {
     const date = moment();
@@ -66,106 +68,130 @@ function duration_team() {
               const time_change =  getChangeval(data.hdp, 'hdp', 'FT-HDP');
               const changeval =  geneGraphEach_noti(data.hdp, 'hdp', 'FT-HDP', valueGraph, 'chartContainerHDP');
               const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
-              // if (time_change < 30) {
-              //   const val_change = changeval.last
-              //   notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
-              //       const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
-              //       let text      = `${data.nonlive.time}  ${val_change.values}  \n ${data.league}  \n ${valueGraph == 'home' ? '😘' :''} ${data.home} \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${data.hdp.length} ${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
-              //       if (team == null && changeval.last.values !== changeval.lastPad.values) {
-              //           const instance = new notinonlive({ 
-              //               'team_id' : data._id,
-              //               'count_hdp' : data.hdp.length,
-              //               'notihdp':{ 
-              //                           time_change: time_change, 
-              //                           hdp:  data.hdp[hdpnow-1].hdp,
-              //                           hdp_lastpad: changeval.lastPad.odds,
-              //                           round:  data.hdp.length,
-              //                           odd: calculator_odd.toFixed(2),
-              //                           time: data.hdp[hdpnow-1].time,
-              //                           value: val_change.value
-              //                       }
-              //           })
-              //           instance.save()
-              //           pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
+              console.log(time_change +'<T:O>'+ calculator_odd)
+              if (time_change < 25 && (calculator_odd >= 0.4 || calculator_odd <= -0.4)) {
+                const val_change = changeval.last
+                notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
+                    const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
+                    let text      = `${data.nonlive.time}  ${val_change.values} : ${data.hdp.length}  \n ${data.league}  \n ${data.home} ${valueGraph == 'home' ? '😘' :''}  \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${data.hdp.length} ${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
+                    if (team == null) {
+                        const instance = new notinonlive({ 
+                            'team_id' : data._id,
+                            'count_hdp' : data.hdp.length,
+                            'notihdp':{ 
+                                        time_change: time_change, 
+                                        hdp:  data.hdp[hdpnow-1].hdp,
+                                        hdp_lastpad: changeval.lastPad.odds,
+                                        round:  data.hdp.length,
+                                        odd: calculator_odd.toFixed(2),
+                                        time: data.hdp[hdpnow-1].time,
+                                        value: val_change.value
+                                    }
+                        })
+                        instance.save()
+                        pushMassage(line_userid,text,acckey)
 
-              //       }else if(team.count_hdp !== data.hdp.length && changeval.last.values !== changeval.lastPad.values){
-              //           const Obj_data = { 
-              //                           time_change: time_change, 
-              //                           hdp:  data.hdp[hdpnow-1].hdp,
-              //                           hdp_lastpad: changeval.lastPad.odds,
-              //                           round:  data.hdp.length,
-              //                           odd: calculator_odd.toFixed(2),
-              //                           time: data.hdp[hdpnow-1].time,
-              //                           value: val_change.value
-              //                       }
-              //           notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_hdp: data.hdp.length } ,$addToSet: {notihdp : Obj_data}}, {new: true}, function (err, massage) {
-              //               if (massage != null) {
-              //                    console.log('working: Update')
-              //                    const noti_db = massage.notihdp
-              //                   let old_text   = ''
-              //                   // console.log(noti_db)
-              //                   old_text += `${data.nonlive.time}  ${val_change.values} : ${noti_db.length} \n${data.league} \n ${data.home}${valueGraph == 'home' ? '😘' :''} \n ${data.away}${valueGraph == 'away' ? '😘' :''}`
-              //                   for (var i = 0; i < noti_db.length; i++) {
-              //                       old_text += ` \n ${noti_db[i].time_change} ( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) ${noti_db[i].odd}`
-              //                   }
-              //                   pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],old_text,acckey)
-              //                   console.log(old_text);
-              //               }
-              //           });
-              //       }
-              //   })
-              // }
-
-                
-                const acckey = '8uZ48WgxCyf206veNE6/TphXGUKtntc5pELOVAjn7xigtAk6QxbRTXXoIqFUymsigLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdIZzZHu0xCyUfHa9Eyvy0oQXUHN/ALB7oLjCdACV46R8QdB04t89/1O/w1cDnyilFU='
-                console.log(calculator_odd.toFixed(2))
-                if (calculator_odd >= 0.13 && changeval.last.values !== changeval.lastPad.values) {
-                    notinonlive.findOne({ team_id :data._id }).exec(function(err, team) {
-                        const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
-                        const text = `${current_time} Time : ${data.nonlive.time}  ${data[colorTeam]} ( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
-                        console.log(text);
-                        if (team == null) {
-                            const instance = new notinonlive({ 
-                                'team_id' : data._id,
-                                'count_price' : data.hdp.length,
-                                'count_hdp': 0
-                            })
-                            instance.save()
-                            pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
-
-                        }else if(team.count_price !== data.hdp.length){
-                            notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_price: data.hdp.length }}, {new: true}, function (err, massage) {
-                                if (massage != null) {
-                                     console.log('working: Update')
+                    }else if(team.count_hdp !== data.hdp.length && changeval.last.values !== changeval.lastPad.values){
+                        const Obj_data = { 
+                                        time_change: time_change, 
+                                        hdp:  data.hdp[hdpnow-1].hdp,
+                                        hdp_lastpad: changeval.lastPad.odds,
+                                        round:  data.hdp.length,
+                                        odd: calculator_odd.toFixed(2),
+                                        time: data.hdp[hdpnow-1].time,
+                                        value: val_change.value
+                                    }
+                        notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_hdp: data.hdp.length } ,$addToSet: {notihdp : Obj_data}}, {new: true}, function (err, massage) {
+                            if (massage != null) {
+                                console.log('working: Update')
+                                const noti_db = massage.notihdp
+                                let old_text   = ''
+                                // console.log(noti_db)
+                                old_text += `${data.nonlive.time}  ${val_change.values} : ${noti_db.length} \n${data.league} \n ${data.home}${valueGraph == 'home' ? '😘' :''} \n ${data.away}${valueGraph == 'away' ? '😘' :''}`
+                                for (var i = 0; i < noti_db.length; i++) {
+                                    old_text += ` \n ${noti_db[i].time_change} ( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) ${noti_db[i].odd}`
                                 }
-                            });
-                            pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
-                        }
-                    })
-                }else if (calculator_odd <= -0.13 && changeval.last.values !== changeval.lastPad.values){
-                    notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
-                        const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
-                        const text = `${current_time} Time : ${data.nonlive.time}  ${data[valueGraph]} ( HDP ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
-                        console.log(text);
-                        if (team == null) {
-                            const instance = new notinonlive({ 
-                                'team_id' : data._id,
-                                'count_price' : data.hdp.length,
-                                'count_hdp': 0
-                            })
-                            instance.save()
-                            pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
+                                pushMassage(line_userid,old_text,acckey)
+                                console.log(old_text);
+                            }
+                        });
+                    }
+                })
+              }
 
-                        }else if(team.count_price !== data.hdp.length){
-                            notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_price: data.hdp.length }}, {new: true}, function (err, massage) {
-                                if (massage != null) {
-                                     console.log('working: Update')
-                                }
-                            });
-                            pushMassage(['U8eb2dd94f8053572d303decd1413dda8','U011891b075259f3861aeec4fff1e7da8'],text,acckey)
-                        }
-                    })
-                }
+              const acckey = '8uZ48WgxCyf206veNE6/TphXGUKtntc5pELOVAjn7xigtAk6QxbRTXXoIqFUymsigLNaGXOzYLN00aHMKhMgwDCGI3zEQXTswpm5YQPtSdIZzZHu0xCyUfHa9Eyvy0oQXUHN/ALB7oLjCdACV46R8QdB04t89/1O/w1cDnyilFU='
+              console.log('Odd :'+ calculator_odd.toFixed(2))
+              if (calculator_odd >= 0.13 && changeval.last.values !== changeval.lastPad.values) {
+                  notinonlive.findOne({ team_id :data._id }).exec(function(err, team) {
+                      const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
+                      const text = `${current_time} Time : ${data.nonlive.time}  \n${data[colorTeam]} \n( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) Odd : ${calculator_odd.toFixed(2)}`
+                      console.log(text);
+                      const obj_odd = { 
+                              odd:calculator_odd.toFixed(2),
+                              hdp:data.hdp[hdpnow-1].hdp,
+                              hdp_lastpad:changeval.lastPad.odds
+                            }
+                      if (team == null) {
+                          const instance = new notinonlive({ 
+                              'team_id' : data._id,
+                              'count_price' : data.hdp.length,
+                              'count_hdp': 0,
+                              'notiodd':obj_odd
+                          })
+                          instance.save()
+                          pushMassage(line_userid,text,acckey)
+
+                      }else if(team.count_price !== data.hdp.length){
+                          notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_price: data.hdp.length } ,$addToSet: {notiodd : obj_odd}}, {new: true}, function (err, massage) {
+                            if (massage != null) {
+                                console.log('working: Update')
+                                  const noti_db = massage.notiodd
+                                  let old_text   = ''
+                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[colorTeam]} `
+                                  for (var i = 0; i < noti_db.length; i++) {
+                                      old_text += ` \n( ${noti_db[hdpnow-1].hdp} : ${noti_db[hdpnow-1].hdp_lastpad} ) Odd : ${noti_db[hdpnow-1].odd}`
+                                  }
+                                  pushMassage(line_userid,old_text,acckey)
+                                  console.log(old_text);
+                              }
+                          });
+                      }
+                  })
+              }else if (calculator_odd <= -0.13 && changeval.last.values !== changeval.lastPad.values){
+                  notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
+                      const current_time  = moment(data.hdp[hdpnow - 1].time).format('hh:mm:ss')
+                      const text = `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘' ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds}) Odd : ${calculator_odd.toFixed(2)}`
+                      console.log(text);
+                      const obj_odd = { 
+                                odd:calculator_odd.toFixed(2),
+                                hdp:data.hdp[hdpnow-1].hdp,
+                                hdp_lastpad:changeval.lastPad.odds
+                              }
+                      if (team == null) {
+                          const instance = new notinonlive({ 
+                              'team_id' : data._id,
+                              'count_price' : data.hdp.length,
+                              'count_hdp': 0,
+                              'notiodd':obj_odd
+                          })
+                          instance.save()
+                          pushMassage(line_userid,text,acckey)
+                      }else if(team.count_price !== data.hdp.length){
+                          notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_price: data.hdp.length } ,$addToSet: {notiodd : obj_odd}}, {new: true}, function (err, massage) {
+                              if (massage != null) {
+                                  const noti_db = massage.notiodd
+                                  let old_text   = ''
+                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘' \ `
+                                  for (var i = 0; i < noti_db.length; i++) {
+                                      old_text += ` \n( ${noti_db[hdpnow-1].hdp} : ${noti_db[hdpnow-1].hdp_lastpad} ) Odd : ${noti_db[hdpnow-1].odd}`
+                                  }
+                                  pushMassage(line_userid,old_text,acckey)
+                                  console.log(old_text);
+                              }
+                          });
+                      }
+                  })
+              }
             }
       });
     }
@@ -191,28 +217,28 @@ function calculator(oods,odds_old) {
 
 function pushMassage(sender, text,acckey) {
     let data = {
-        to: sender,
-        messages: [
-          {
-            type: 'text',
-            text: text
-          }
-        ]
-      }
-      request({
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer {${acckey}}`
-        },
-        url: 'https://api.line.me/v2/bot/message/multicast',
-        method: 'POST',
-        body: data,
-        json: true
-      }, function (err, res, body) {
-        if (err) console.log('error')
-        if (res) console.log('success')
-        if (body) console.log(body)
-      })
+      to: sender,
+      messages: [
+        {
+          type: 'text',
+          text: text
+        }
+      ]
+    }
+    request({
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer {${acckey}}`
+      },
+      url: 'https://api.line.me/v2/bot/message/multicast',
+      method: 'POST',
+      body: data,
+      json: true
+    }, function (err, res, body) {
+      if (err) console.log('error')
+      if (res) console.log('success')
+      if (body) console.log(body)
+    })
 }
 
 function getChangeval(data) {
@@ -220,34 +246,7 @@ function getChangeval(data) {
   const hdp_last   = data[num-1]
   const hdp_old  = data[num-2]
   const time_chane =  (moment(hdp_last.time) - moment(hdp_old.time))/ 1000
-  // console.log(hdp_old.time +'='+ hdp_last.time + ':' + time_chane)
   return Math.round(time_chane)
-}
-
-function sendText (sender, text) {
-  let data = {
-    to: sender,
-    messages: [
-      {
-        type: 'text',
-        text: 'สวัสดีค่ะ เราเป็นผู้ช่วยปรึกษาด้านความรัก สำหรับหมามิ้น 💞'
-      }
-    ]
-  }
-  request({
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer {7vMw0bRGc4GE40gKz8LVYaqzbosXNpJ32gmmja5DK2NOOquFSl2GXBBUtLT9xH9HITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A1Mtd1IhmkoXtQvk/rdVk3CYEKqdEpf01ChYWVaRXZgYwdB04t89/1O/w1cDnyilFU=}'
-    },
-    url: 'https://api.line.me/v2/bot/message/multicast',
-    method: 'POST',
-    body: data,
-    json: true
-  }, function (err, res, body) {
-    if (err) console.log('error')
-    if (res) console.log('success')
-    if (body) console.log(body)
-  })
 }
 
 function geneGraphEach_noti(data, filter, type, value, containername) {
