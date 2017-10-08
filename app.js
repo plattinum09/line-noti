@@ -73,7 +73,7 @@ function duration_team() {
                 const val_change = changeval.last
                 notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
                     const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
-                    let text      = `${data.nonlive.time}  ${val_change.values} : ${data.hdp.length}  \n ${data.league}  \n ${data.home} ${valueGraph == 'home' ? '😘' :''}  \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${data.hdp.length} ${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
+                    let text      = `${data.nonlive.time}  ${val_change.values} : ${data.hdp.length}  \n ${data.league}  \n ${data.home} ${valueGraph == 'home' ? '😘' :''}  \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
                     if (team == null) {
                         const instance = new notinonlive({ 
                             'team_id' : data._id,
