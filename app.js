@@ -68,12 +68,12 @@ function duration_team() {
               const time_change =  getChangeval(data.hdp, 'hdp', 'FT-HDP');
               const changeval =  geneGraphEach_noti(data.hdp, 'hdp', 'FT-HDP', valueGraph, 'chartContainerHDP');
               const calculator_odd =  calculator(changeval.last.odds,changeval.lastPad.odds)
-              console.log(time_change +'<T:O>'+ calculator_odd)
+              console.log(time_change +' <T:O> '+ calculator_odd)
               if (time_change < 25) {
                 const val_change = changeval.last
                 notinonlive.findOne({team_id :data._id}).exec(function(err, team) {
                     const acckey = 'i4vkC1Gx3wUUaakVZ/Sr6vb7puGwERp0aNvK8XnAR5PqIug+r5LS9EQKMkm76X+aITMc9Y15X84YhMhJFoC3bDgvcK2iedZleSJmMppj3A24ukTT6gLxxu412+ORzOo2I4ZD/GCJEr0FGbl1ffdVHgdB04t89/1O/w1cDnyilFU='
-                    let text      = `${data.nonlive.time}  ${val_change.values} : ${data.hdp.length}  \n ${data.league}  \n ${data.home} ${valueGraph == 'home' ? '😘' :''}  \n  ${valueGraph == 'away' ? '😘' :''}${data.away}  \n${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
+                    let text      = `${data.nonlive.time}  ${val_change.values} : ${data.hdp.length} \n${data.league} \n${data.home}${valueGraph == 'home' ? '😘' :''} \n${data.away}${valueGraph == 'away' ? '😘' :''} \n${time_change} ( ${data.hdp[hdpnow-1].hdp} : ${changeval.lastPad.odds} ) ${calculator_odd.toFixed(2)}`
                     if (team == null) {
                         const instance = new notinonlive({ 
                             'team_id' : data._id,
@@ -106,10 +106,9 @@ function duration_team() {
                                 console.log('working: Update')
                                 const noti_db = massage.notihdp
                                 let old_text   = ''
-                                // console.log(noti_db)
-                                old_text += `${data.nonlive.time}  ${val_change.values} : ${noti_db.length} \n${data.league} \n ${data.home}${valueGraph == 'home' ? '😘' :''} \n ${data.away}${valueGraph == 'away' ? '😘' :''}`
+                                old_text += `${data.nonlive.time}  ${val_change.values} : ${noti_db.length} \n${data.league} \n${data.home}${valueGraph == 'home' ? '😘' :''} \n${data.away}${valueGraph == 'away' ? '😘' :''}`
                                 for (var i = 0; i < noti_db.length; i++) {
-                                    old_text += ` \n ${noti_db[i].time_change} ( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) ${noti_db[i].odd}`
+                                    old_text += `\n ${noti_db[i].time_change} ( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) ${noti_db[i].odd}`
                                 }
                                 pushMassage(line_userid,old_text,acckey)
                                 console.log(old_text);
@@ -128,7 +127,7 @@ function duration_team() {
                       console.log(text);
                       const obj_odd = { 
                               odd:calculator_odd.toFixed(2),
-                              hdp:data.hdp[hdpnow-1].hdp,
+                              hdp: data.hdp[hdpnow-1].hdp,
                               hdp_lastpad:changeval.lastPad.odds
                             }
                       if (team == null) {
@@ -144,12 +143,11 @@ function duration_team() {
                       }else if(team.count_price !== data.hdp.length){
                           notinonlive.findOneAndUpdate({team_id: data._id}, {$set:{count_price: data.hdp.length } ,$addToSet: {notiodd : obj_odd}}, {new: true}, function (err, massage) {
                             if (massage != null) {
-                                console.log('working: Update')
                                   const noti_db = massage.notiodd
                                   let old_text   = ''
-                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[colorTeam]} `
+                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[colorTeam]}`
                                   for (var i = 0; i < noti_db.length; i++) {
-                                      old_text += ` \n( ${noti_db[hdpnow-1].hdp} : ${noti_db[hdpnow-1].hdp_lastpad} ) Odd : ${noti_db[hdpnow-1].odd}`
+                                      old_text += `\n( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) Odd : ${noti_db[i].odd}`
                                   }
                                   pushMassage(line_userid,old_text,acckey)
                                   console.log(old_text);
@@ -181,9 +179,9 @@ function duration_team() {
                               if (massage != null) {
                                   const noti_db = massage.notiodd
                                   let old_text   = ''
-                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘' \ `
+                                  old_text += `${current_time} Time : ${data.nonlive.time} \n${data[valueGraph]}'😘'`
                                   for (var i = 0; i < noti_db.length; i++) {
-                                      old_text += ` \n( ${noti_db[hdpnow-1].hdp} : ${noti_db[hdpnow-1].hdp_lastpad} ) Odd : ${noti_db[hdpnow-1].odd}`
+                                      old_text += `\n( ${noti_db[i].hdp} : ${noti_db[i].hdp_lastpad} ) Odd : ${noti_db[i].odd}`
                                   }
                                   pushMassage(line_userid,old_text,acckey)
                                   console.log(old_text);
